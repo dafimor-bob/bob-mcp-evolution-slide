@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bob MCP — Evolution & Roadmap</title>
+<style>
+  :root {
+    --bob-red: #ff3d57;
+    --bob-red-dark: #e02945;
+    --ink: #14142b;
+    --ink-soft: #4a4a68;
+    --muted: #8a8aa3;
+    --bg: #ffffff;
+    --panel: #f6f6fb;
+    --line: #e7e7f0;
+    --accent: #6c5ce7;
+    --green: #16a34a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: #2a2a3a;
+    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .slide {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    background: var(--bg);
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+  }
+
+  /* top accent bar */
+  .slide::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, var(--bob-red), var(--accent));
+  }
+
+  .pad { padding: 44px 56px 40px; height: 100%; display: flex; flex-direction: column; }
+
+  /* header */
+  .header { display: flex; align-items: flex-start; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .dot {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--bob-red);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 18px;
+  }
+  .brand .name { font-weight: 700; font-size: 16px; letter-spacing: .2px; color: var(--ink); }
+  .brand .name span { color: var(--muted); font-weight: 500; }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bob-red);
+  }
+  h1 {
+    font-size: 34px;
+    line-height: 1.1;
+    margin-top: 6px;
+    color: var(--ink);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .subtitle { font-size: 14px; color: var(--ink-soft); margin-top: 8px; max-width: 760px; }
+
+  .clients { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; max-width: 260px; }
+  .chip {
+    font-size: 11px; font-weight: 600; color: var(--ink-soft);
+    background: var(--panel); border: 1px solid var(--line);
+    padding: 5px 10px; border-radius: 999px;
+  }
+  .chip-label { font-size: 10px; color: var(--muted); width: 100%; text-align: right; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; }
+
+  /* timeline */
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: auto; margin-bottom: auto; }
+  .stage {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 16px 16px;
+    display: flex; flex-direction: column;
+  }
+  .stage.current {
+    background: #fff;
+    border: 2px solid var(--bob-red);
+    box-shadow: 0 14px 30px rgba(255,61,87,0.14);
+  }
+  .stage .ver {
+    font-size: 13px; font-weight: 800; letter-spacing: .5px;
+    color: var(--muted);
+  }
+  .stage.current .ver { color: var(--bob-red); }
+  .stage .tag {
+    align-self: flex-start;
+    margin-top: 8px;
+    font-size: 10px; font-weight: 700; letter-spacing: .4px;
+    padding: 3px 8px; border-radius: 6px;
+    text-transform: uppercase;
+  }
+  .tag.past { background: #ececf3; color: var(--muted); }
+  .tag.live { background: #e8f7ee; color: var(--green); }
+  .tag.now  { background: var(--bob-red); color: #fff; }
+
+  .stage h3 { font-size: 15px; margin-top: 12px; color: var(--ink); font-weight: 700; }
+  .stage ul { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 7px; }
+  .stage li { font-size: 12px; color: var(--ink-soft); line-height: 1.35; padding-left: 16px; position: relative; }
+  .stage li::before {
+    content: ""; position: absolute; left: 0; top: 6px;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--bob-red); opacity: .55;
+  }
+  .stage.current li::before { opacity: 1; }
+
+  /* roadmap */
+  .roadmap { margin-top: 24px; }
+  .roadmap-head { display: flex; align-items: center; gap: 10px; }
+  .roadmap-head .line { flex: 1; height: 1px; background: var(--line); }
+  .roadmap-head .label { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+
+  .road-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; }
+  .road {
+    border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
+    background: linear-gradient(180deg, #fbfbff, #f6f6fb);
+  }
+  .road .ico { font-size: 18px; }
+  .road h4 { font-size: 14px; margin-top: 6px; color: var(--ink); font-weight: 700; }
+  .road p { font-size: 11.5px; color: var(--ink-soft); margin-top: 5px; line-height: 1.4; }
+
+  /* footer */
+  .footer {
+    padding-top: 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--line);
+    font-size: 11px; color: var(--muted);
+  }
+  .footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .footer .right { display: flex; gap: 18px; }
+
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    html, body { background: #fff; }
+    .slide { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="pad">
+      <!-- HEADER -->
+      <div class="header">
+        <div>
+          <div class="brand">
+            <div class="dot">b</div>
+            <div class="name">HiBob <span>· MCP Server</span></div>
+          </div>
+          <div class="eyebrow" style="margin-top:20px;">Model Context Protocol</div>
+          <h1>Bob MCP — Built to Evolve</h1>
+          <div class="subtitle">
+            Bob's MCP server connects your favorite AI clients securely to HiBob — moving from
+            admin-only API access to full, permission-aware AI capabilities for every employee.
+          </div>
+        </div>
+        <div class="clients">
+          <div class="chip-label">Works with</div>
+          <div class="chip">ChatGPT</div>
+          <div class="chip">Claude.ai</div>
+          <div class="chip">Claude Desktop</div>
+          <div class="chip">Cursor</div>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="timeline">
+        <div class="stage">
+          <div class="ver">V1</div>
+          <div class="tag past">Foundation</div>
+          <h3>Local & API-first</h3>
+          <ul>
+            <li>Service-user authentication</li>
+            <li>Public APIs</li>
+            <li>Locally hosted server</li>
+          </ul>
+        </div>
+
+        <div class="stage">
+          <div class="ver">V2</div>
+          <div class="tag live">Generally available</div>
+          <h3>Fully hosted</h3>
+          <ul>
+            <li>HiBob-hosted server</li>
+            <li>No local setup required</li>
+            <li>Public APIs, open to all</li>
+          </ul>
+        </div>
+
+        <div class="stage">
+          <div class="ver">V3</div>
+          <div class="tag live">Available</div>
+          <h3>OAuth for everyone</h3>
+          <ul>
+            <li>Secure OAuth sign-in</li>
+            <li>Open to all employees, not just admins</li>
+            <li>Respects each user's Bob permissions</li>
+          </ul>
+        </div>
+
+        <div class="stage current">
+          <div class="ver">V4</div>
+          <div class="tag now">Now rolling out</div>
+          <h3>Advanced AI tools</h3>
+          <ul>
+            <li>Expanding to ~150 tools</li>
+            <li>Powerful employee search with filters</li>
+            <li>Richer, more flexible AI capabilities</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <div>Permission-aware by design · Your data stays governed by your existing Bob roles</div>
+        <div class="right">
+          <a href="https://help.hibob.com/hc/en-us/articles/47317999547921-Use-Bob-MCP-Server">Help Center</a>
+          <a href="https://apidocs.hibob.com/docs/hibob-mcp-server">Developer Docs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
